@@ -10,11 +10,11 @@ class FilterBar extends React.Component {
   render() {
     return (
       <Segment>
-        <Grid>
-          <Grid.Column width={2} className="vertical-align-middle">
+        <Grid stackable>
+          <Grid.Column width={2} className="vertical-align-middle" >
             <Header as="h4" >Sort by:</Header>
           </Grid.Column>
-          <Grid.Column width={4}>
+          <Grid.Column width={6}>
             <Dropdown
               className='filterDropdown'
               placeholder="Most popular"
@@ -24,9 +24,6 @@ class FilterBar extends React.Component {
               value={this.props.sort}
               onChange={(e, data) => {this.props.toggleSort(data.value)}}
             />
-          </Grid.Column>
-          <Grid.Column width={8}>
-
           </Grid.Column>
           <Grid.Column width={2} className="vertical-align-middle" >
             <Icon

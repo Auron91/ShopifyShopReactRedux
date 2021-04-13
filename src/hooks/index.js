@@ -1,1 +1,1 @@
-export { useShopify } from '../redux/reducers/shopifyReducer'
+export { useShopify } from '../redux/actions/shopifyActions'

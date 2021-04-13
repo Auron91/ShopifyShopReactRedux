@@ -1,19 +1,17 @@
 import React, { useEffect } from "react";
-import { connect } from 'react-redux';
-import { Card, Image, Grid, Label, Item, Button, Icon } from "semantic-ui-react";
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import FilterBar from './FilterBar';
-// import { fetchProducts } from '../redux/reducers/shopifyReducer';
-// import { getProducts } from ''
+import { Card, Image, Grid, Label, Item, Button, Icon } from "semantic-ui-react";
 import { useShopify } from '../hooks'
-import _ from "lodash";
 
 const filterOptions = [
-  {
-    key: "Most Popular",
-    text: "Most Popular",
-    value: "Most Popular",
-  },
+  // {
+  //   key: "Most Popular",
+  //   text: "Most Popular",
+  //   value: "Most Popular",
+  // },
   {
     key: "New Arrivals",
     text: "New Arrivals",
@@ -31,25 +29,49 @@ const filterOptions = [
   },
 ];
 
+const sortProducts = (data, sortDirection) => {
+  var result = []
+  if (sortDirection === 'Most Popular') {
+    result = data.sort(( a, b ) => {
+      return b.sold - a.sold
+    })
+  } else if (sortDirection === 'New Arrivals') {
+    result = data.sort(( a, b) => {
+      return (a.productType===null)-(b.productType===null) || -(a.productType>b.productType);
+    })
+  } else if (sortDirection === 'Price (Low-High)') {
+    result = data.sort(( a, b) => {
+      return a.variants[0].price - b.variants[0].price
+    })
+  } else if (sortDirection === 'Price (High-Low)') {
+    result = data.sort(( a, b) => {
+      return b.variants[0].price - a.variants[0].price
+    })
+  } else return data;
+  return result;
+}
 
 const ProductGrid = (props) => {
-  const { fetchProducts } = useShopify();
+  const { fetchProducts, products } = useShopify();
+  const sort = useSelector( state => state.settings.sort )
+  const view = useSelector( state => state.settings.view )
+
+  let sortedProducts = sortProducts(products, sort)
 
   useEffect(() => {
     fetchProducts();
-    // this.props.getProducts();
-    console.log(props.products);
+    console.log('render');
   }, [])
 
   const renderGrid =
-    (<Grid columns={3} stackable>
-      {props.products.map(product => {
+    (<Grid columns={3} stackable doubling>
+      {sortedProducts.map(product => {
         return (
           <Grid.Column key={product.id}>
-            <Card as={Link} to={`/shop/${product.id}`} className="card">
+            <Card as={Link} to={`/shop/${product.id}`} className="card" fluid>
               <Card.Content>
-                {product.isNew && <Label color="black" className="newBadge">NEW</Label>}
-                <Image src={product.images[0].src} />
+                {product.productType && <Label color="black" className="newBadge">NEW</Label>}
+                <Image src={product.images[0].src} centered />
                 <Card.Header floated='left'>{product.title}</Card.Header>
                 <Card.Meta textAlign='right'>{product.variants[0].price}$</Card.Meta>
               </Card.Content>
@@ -63,14 +85,14 @@ const ProductGrid = (props) => {
   const renderItems =
     (<Item.Group divided>
       {
-        props.products.map(product => {
+        sortedProducts.map(product => {
           return (
-            <Item key={product.id}>
+            <Item as={Link} to={`/shop/${product.id}`} key={product.id} >
               <Item.Image size='medium' src={product.images[0].src} />
               <Item.Content>
                 <Item.Header>{product.title}</Item.Header>
                 <Item.Description>{product.description}</Item.Description>
-                <Item.Header color='red'>{product.variants[0].price} $</Item.Header>
+                <Item.Header color='red'><p>{product.variants[0].price} $ </p></Item.Header>
                 <Item.Extra>
                   <Button primary floated='right'>
                     Add to cart
@@ -84,24 +106,13 @@ const ProductGrid = (props) => {
       }
     </Item.Group>)
 
-
-
-
   return (
     <div className="">
       <FilterBar options={filterOptions} />
-      {props.view === 'grid layout' && props.products ? renderGrid : renderItems}
+      { !products ? <h2>Loading...</h2> : null }
+      {view === 'grid layout' && products ? renderGrid : renderItems}
     </div>
   );
 }
 
-
-const mapStateToProps = (state) => {
-  return {
-    products: state.shopifyState.products,
-    view: state.settings.view,
-    sort: state.settings.sort
-  };
-}
-
-export default connect(mapStateToProps, {  })(ProductGrid)
+export default ProductGrid

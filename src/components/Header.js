@@ -1,47 +1,24 @@
-import React, { Component } from "react";
-import { Container, Icon, Input, Image, Menu, Label } from "semantic-ui-react";
+import React, { useState } from "react";
+
 import { Link } from 'react-router-dom'
+import MobileNav from './menu/MobileNav'
+import NavBarDesktop from './menu/NavBarDesktop'
 
-export default class Header extends Component {
-  state = {};
+const leftItems = [
+  { as: Link, content: "Mens", key: "mens", to: '/shop' },
+  { as: Link, content: "Womens", key: "womens", to: '/shop' },
+  { as: Link, content: "Kids", key: "kids", to: '/' }
+]
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+const Header = () => {
 
-  render() {
-    const { activeItem } = this.state
-    return (
-      <Menu>
-        <Container>
-          <Menu.Item>
-            <Image src='/images/logo.jpg' size='tiny' />
-          </Menu.Item>
-          <Menu.Item
-            as={Link}
-            to='/'
-            name='home'
-            active={activeItem === 'home'}
-            onClick={this.handleItemClick}>
-          </Menu.Item>
-          <Menu.Item
-            as={Link}
-            to='/shop'
-            name='shop'
-            active={activeItem === 'shop'}
-            onClick={this.handleItemClick}
-          />
 
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              <Input icon='search' placeholder='Search..' />
-            </Menu.Item>
-            <Menu.Item>
-              <Label className="shopingCartLabel" color='red'>2</Label>
-              <Icon size='big' name='shopping cart' />
-                569.98 $
-              </Menu.Item>
-          </Menu.Menu>
-        </Container>
-      </Menu>
-    );
-  }
+  return (
+    <>
+      <NavBarDesktop leftItems={leftItems} />
+      <MobileNav leftItems={leftItems} />
+    </>
+  );
 }
+
+export default Header
