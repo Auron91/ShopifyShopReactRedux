@@ -1,4 +1,4 @@
-import { Grid, Sidebar } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import SidebarMenu from './SidebarMenu'
 import ProductGrid from "./ProductGrid";
 

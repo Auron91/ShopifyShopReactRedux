@@ -1,6 +1,6 @@
 import "./App.scss";
 import { Router, Route, Switch } from 'react-router-dom';
-import { Sidebar } from "semantic-ui-react";
+import { Sidebar, Container } from "semantic-ui-react";
 // components
 import Header from "./components/Header";
 import BreadcrumbBar from "./components/BreadcrumbBar";
@@ -13,7 +13,20 @@ import history from './history'
 import { useSelector, useDispatch } from 'react-redux'
 import { handlePusher } from './redux/actions/index'
 
+import { useShopify } from './hooks'
+import { useEffect } from "react";
+import Cart from "./components/cart/Cart";
+
 function App() {
+  const {
+    createShop,
+    createCheckout
+  } = useShopify();
+
+  useEffect(() => {
+    createShop()
+    createCheckout()
+  }, [])
   const visible = useSelector(state => state.settings.mobileNav)
   const dispatch = useDispatch();
 
@@ -21,16 +34,19 @@ function App() {
     <>
       <Router history={history}>
         <Sidebar.Pushable>
-          <Header />
-          <Sidebar.Pusher onClick={() => dispatch(handlePusher())} dimmed={visible} style={{ minHeight: '100vh' }}>
-            <BreadcrumbBar />
-            <Switch>
-              <Route path='/' exact component={Home} />
-              <Route path='/shop' exact component={Shop} />
-              <Route path='/shop/:id' exact component={ProductItem} />
-            </Switch>
-            <Footer />
-          </Sidebar.Pusher>
+          <Container>
+            <Header />
+            <Sidebar.Pusher onClick={() => dispatch(handlePusher())} dimmed={visible} style={{ minHeight: '100vh' }}>
+              <BreadcrumbBar />
+              <Switch>
+                <Route path='/' exact component={Home} />
+                <Route path='/shop' exact component={Shop} />
+                <Route path='/shop/:id' exact component={ProductItem} />
+                <Route path='/cart' exact component={Cart} />
+              </Switch>
+              <Footer />
+            </Sidebar.Pusher>
+          </Container>
         </Sidebar.Pushable>
       </Router>
     </>

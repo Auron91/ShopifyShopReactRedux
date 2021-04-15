@@ -1,4 +1,5 @@
-import { Container, Menu, Sidebar, Image, Label, Icon } from "semantic-ui-react";
+import { Container, Menu, Sidebar, Image, Label, Icon, Button } from "semantic-ui-react";
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleMobileNav } from '../../redux/actions/index'
 
@@ -11,7 +12,7 @@ const MobileNav = (props) => {
         <>
             <Menu className="mobile-nav" secondary>
                 <Container className="navbar">
-                    <Menu.Item>
+                    <Menu.Item as={Link} to='/' >
                         <Image src='/images/logo.jpg' size='tiny' />
                     </Menu.Item>
                     <Menu.Item>
@@ -22,8 +23,9 @@ const MobileNav = (props) => {
                         </button>
                     </Menu.Item>
                     <Menu.Menu position='right'>
-                        <Menu.Item as={Icon} icon='search' size='big' />
-                        <Menu.Item>
+                        <Menu.Item as={Button} icon='search' size='huge' />
+                        <Menu.Item as={Button} icon='user' size='huge' />
+                        <Menu.Item as={Button}>
                             <Label className="shopingCartLabel" color='red'>2</Label>
                             <Icon size='big' name='shopping cart' />
                         </Menu.Item>
@@ -45,7 +47,7 @@ const MobileNav = (props) => {
                     </Menu.Item>
                     <Menu.Item>
                         <Label className="shopingCartLabel" color='red'>2</Label>
-                        <Icon size='huge' name='shopping cart' />
+                        <Icon size='big' name='shopping cart' style={{margin: '0.5rem'}}/>
                     </Menu.Item>
                 </Menu>
                 {leftItems.map((item) => {

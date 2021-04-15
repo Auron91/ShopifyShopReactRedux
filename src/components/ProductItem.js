@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, Header, Icon } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Popup } from 'semantic-ui-react';
 import { useShopify } from '../hooks';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
@@ -7,35 +7,41 @@ import _ from 'lodash';
 import '../App.scss'
 
 const ProductItem = (props) => {
-    const { fetchProduct } = useShopify();
+    const { fetchProduct, addVariant, checkoutState } = useShopify();
     const [product, setProduct] = useState([]);
-    const [active, setActive] = useState();
-    const [quanity, setQuanity] = useState(1);
+    const [size, setSize] = useState(null);
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         fetchProduct(props.match.params.id).then((response) => {
             setProduct(response);
         });
-        console.log('render');
     }, [])
 
-    const toggleActive = (e) => {
-        setActive(e.target.value)
+    const toggleSize = (e) => {
+        setSize(e.target.value)
     }
-    const decrementQuanity = () => {
-        if (quanity === 1) {
-            setQuanity(1)
+    const decrementQuantity = () => {
+        if (quantity === 1) {
+            setQuantity(1)
         } else {
-            setQuanity(quanity - 1)
+            setQuantity(quantity - 1)
         }
     }
-    const incrementQuanity = () => {
-        setQuanity(quanity + 1)
+    const incrementQuantity = () => {
+        setQuantity(quantity + 1)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e, size, quantity) => {
+
         e.preventDefault();
-        console.log(e);
+        if(size) {
+            const itemsToAdd = [
+                { variantId: size, quantity: quantity }
+            ]
+            const checkoutId = checkoutState.id
+            addVariant(checkoutId, itemsToAdd);
+        }
     }
 
     if (_.isEmpty(product)) {
@@ -64,7 +70,7 @@ const ProductItem = (props) => {
                                 {product.variants[0].price} $
                         </Header>
                         </Grid.Row>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={(e) => handleSubmit(e, size, quantity)}>
                             <Grid.Row>
                                 <p> Size: Select Size</p>
                                 <div className="product-variants">
@@ -73,10 +79,10 @@ const ProductItem = (props) => {
                                             <label
                                                 key={variant.id}
                                                 name={variant.id}
-                                                className={active === variant.id ? "product-variants__label on" : "product-variants__label"}
+                                                className={size === variant.id ? "product-variants__label on" : "product-variants__label"}
                                             >
                                                 <input
-                                                    onClick={toggleActive}
+                                                    onClick={toggleSize}
                                                     type="radio" className="products-variant__radio"
                                                     name='variant'
                                                     value={variant.id}
@@ -88,26 +94,35 @@ const ProductItem = (props) => {
                                 </div>
                             </Grid.Row>
                             <Grid.Row>
-                                <p>Quanity: select quanity</p>
+                                <p>Quantity: select quantity</p>
                                 <Grid.Column>
-                                    <div className="product-quanity">
+                                    <div className="product-quantity">
                                         <label
-                                            className="product-quanity__item"
-                                            onClick={decrementQuanity}
+                                            className="product-quantity__item"
+                                            onClick={decrementQuantity}
                                         >-</label>
-                                        <output className="product-quanity__item" value={quanity}>{quanity}</output>
+                                        <output className="product-quantity__item" value={quantity}>{quantity}</output>
                                         <label
-                                            className="product-quanity__item"
-                                            onClick={incrementQuanity}
+                                            className="product-quantity__item"
+                                            onClick={incrementQuantity}
                                         >+</label>
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column>
                                     <p></p>
-                                    <Button color='red' style={{ paddingLeft: '1rem' }}>
-                                        Add to the cart
+                                    <Popup
+                                    disabled = {size !== null? true : false }
+                                    style={{backgroundColor: 'yellow'}} trigger={
+                                        <Button
+                                            color='red'
+                                            style={{ paddingLeft: '1rem' }}
+                                        >
+                                            Add to the cart
                                 <Icon name='shopping cart' style={{ paddingLeft: '1rem' }} />
-                                    </Button>
+                                        </Button>
+                                    }>
+                                    <Popup.Content>Select size</Popup.Content>
+                                    </Popup>
                                 </Grid.Column>
                             </Grid.Row >
                         </form>
@@ -117,7 +132,13 @@ const ProductItem = (props) => {
                     <Grid.Column width={8}>
                         {product.description}
                     </Grid.Column>
-                    <Grid.Column width={8}></Grid.Column>
+                    <Grid.Column width={8}>
+                        <p>Share:
+                            <Icon circular link name='twitter' inverted size='small' style={{ marginLeft: '1rem' }} />
+                            <Icon circular link name='facebook f' inverted size='small' />
+                            <Icon circular link name='mail' inverted size='small' />
+                        </p>
+                    </Grid.Column>
                 </Grid.Row>
             </Grid>
         )

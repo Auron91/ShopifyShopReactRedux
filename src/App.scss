@@ -99,8 +99,9 @@ body {
 
 .shopingCartLabel {
     position: absolute;
+    font-size: 0.75rem;
     z-index: 5;
-    top: 0.5rem;
+    top: 0rem;
     left: 2rem;
 }
 
@@ -156,7 +157,7 @@ body {
     padding: 1rem 2rem;
 }
 
-.product-quanity {
+.product-quantity {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
