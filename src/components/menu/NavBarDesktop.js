@@ -5,6 +5,7 @@ import { Container, Icon, Input, Image, Menu, Label } from "semantic-ui-react"
 import { toggleMobileNav } from '../../redux/actions/index'
 import { useShopify } from "../../hooks";
 import CartPopup from '../cart/CartPopup';
+import { Link } from 'react-router-dom';
 
 const NavBarDesktop = (props) => {
     const dispatch = useDispatch();
@@ -38,15 +39,17 @@ const NavBarDesktop = (props) => {
 
     const openCheckout = (e) => {
         e.preventDefault()
-        // window.open(checkoutState.webUrl) // opens checkout in a new window
-        window.location.replace(checkoutState.webUrl) // opens checkout in same window
+        window.open(checkoutState.webUrl) // opens checkout in a new window
+        // window.location.replace(checkoutState.webUrl) // opens checkout in same window
     }
 
     return (
         <Menu className="desktop-nav" secondary>
             <Container className="navbar">
                 <Menu.Item>
-                    <Image src='/images/logo.jpg' size='tiny' />
+                    <Link to='./' >
+                        <Image src='/images/logo.jpg' size='tiny' />
+                    </Link>
                 </Menu.Item>
                 <Menu.Item>
                     <button className={mobileNav ? "hamburger--active" : "hamburger"} color='white' onClick={() => dispatch(toggleMobileNav())}>
@@ -73,9 +76,9 @@ const NavBarDesktop = (props) => {
                     <Menu.Item>
                         <Icon name='user' size='big' />
                     </Menu.Item>
-                    <Menu.Item>
+                    <Menu.Item as={Link} to='/cart'>
                         {cartCount > 0 ? <Label circular size='mini' className="shopingCartLabel" color='red'>{cartCount}</Label> : null}
-                        <CartPopup cartCount={cartCount} checkoutState={checkoutState} onCheckout={openCheckout}/>
+                        <CartPopup cartCount={cartCount} checkoutState={checkoutState} onCheckout={openCheckout} />
                     </Menu.Item>
                 </Menu.Menu>
             </Container>

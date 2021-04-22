@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import FilterBar from './FilterBar';
-import { Card, Image, Grid, Label, Item, Button, Icon } from "semantic-ui-react";
+import AddToCart from './cart/AddToCart'
+import { Card, Image, Grid, Label, Item } from "semantic-ui-react";
 import { useShopify } from '../hooks'
 
 const filterOptions = [
@@ -63,16 +64,13 @@ const ProductGrid = (props) => {
   const sort = useSelector(state => state.settings.sort)
   const view = useSelector(state => state.settings.view)
 
-  let filteredProducts = filterProducts(products,'sex', props.sex)
+  let filteredProducts = filterProducts(products, 'sex', props.sex)
   let sortedProducts = sortProducts(filteredProducts, sort)
 
   useEffect(() => {
     fetchProducts();
     fetchCustomQuery();
-    // const collectionID = `gid://shopify/Collection/+${props.collection}`
-    // console.log(collectionID);
-    // const collection = fetchCollection(`gid://shopify/Collection/+${props.collection}`)
-    // console.log(collection);
+
   }, [])
 
   const renderGrid =
@@ -99,18 +97,15 @@ const ProductGrid = (props) => {
       {
         sortedProducts.map(product => {
           return (
-            <Item as={Link} to={`/shop/${product.id}`} key={product.id} >
-              <Item.Image size='medium' src={product.images[0].src} />
+            <Item  key={product.id} >
+              <Item.Image as={Link} to={`/shop/${product.id}`} size='medium' src={product.images[0].src} />
               <Item.Content>
-                <Item.Header>{product.title}</Item.Header>
+                <Item.Header as={Link} to={`/shop/${product.id}`}>{product.title}</Item.Header>
                 <Item.Description>{product.description}</Item.Description>
                 <Item.Header color='red'><p>{product.variants[0].price} $ </p></Item.Header>
-                <Item.Extra>
-                  <Button primary floated='right'>
-                    Add to cart
-                    <Icon name='right chevron' />
-                  </Button>
-                </Item.Extra>
+                <Item.Description>
+                  <AddToCart product= {product} />
+                </Item.Description>
               </Item.Content>
             </Item>
           )

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Grid, Image, Button } from "semantic-ui-react";
+import { Link } from 'react-router-dom';
 import { useShopify } from "../../hooks";
 import Quantity from "./Quantity";
 
@@ -14,12 +15,17 @@ const Cart = () => {
     })
 
     const handleUpdateQuantity = (itemId, quantity) => {
-        console.log('updated');
         updateQuantity(itemId, quantity, checkoutState.id)
     }
 
+    const openCheckout = (e) => {
+        e.preventDefault()
+        window.open(checkoutState.webUrl) // opens checkout in a new window
+        // window.location.replace(checkoutState.webUrl) // opens checkout in same window
+    }
+
     return (
-        <Grid columns={6} divided='vertically'>
+        <Grid columns={6} divided='vertically' >
             <Grid.Row textAlign='center'>
                 <Grid.Column>Image</Grid.Column>
                 <Grid.Column>Product</Grid.Column>
@@ -31,8 +37,10 @@ const Cart = () => {
             {items && items.map((item) => {
                 return (
                     <Grid.Row key={item.id} textAlign='center' verticalAlign='middle'>
-                        <Grid.Column as={Image} src={item.variant.image.src} size='tiny' />
-                        <Grid.Column>{item.title}</Grid.Column>
+                        <Grid.Column>
+                            <Image as={Link} to={`/shop/${item.variant.product.id}`} src={item.variant.image.src} size='tiny' />
+                        </Grid.Column>
+                        <Grid.Column as={Link} to={`/shop/${item.variant.product.id}`}>{item.title}</Grid.Column>
                         <Grid.Column>{item.variant.price}</Grid.Column>
                         <Grid.Column>
                             <Quantity item={item} handleUpdateQuantity={handleUpdateQuantity} />
@@ -44,6 +52,16 @@ const Cart = () => {
                     </Grid.Row>
                 )
             })}
+            <Grid.Row textAlign='center' verticalAlign='middle'>
+                <Grid.Column></Grid.Column>
+                <Grid.Column></Grid.Column>
+                <Grid.Column></Grid.Column>
+                <Grid.Column></Grid.Column>
+                <Grid.Column as='h3'>{`Total: ${checkoutState.paymentDue}`}</Grid.Column>
+                <Grid.Column>
+                    {checkoutState.requiresShipping && <Button color='red' onClick={(e) => openCheckout(e)}>Checkout</Button>}
+                </Grid.Column>
+            </Grid.Row>
         </Grid>
     );
 }

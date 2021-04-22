@@ -33,29 +33,29 @@ function App() {
   return (
     <>
       <Router history={history}>
-        <Sidebar.Pushable>
-          <Container>
+        <Container>
+          <Sidebar.Pushable>
             <Header />
             <Sidebar.Pusher onClick={() => dispatch(handlePusher())} dimmed={visible} style={{ minHeight: '100vh' }}>
               <BreadcrumbBar />
               <Switch>
                 <Route path='/' exact component={Home} />
                 <Route path='/men' exact >
-                    <Shop sex='male' />
+                  <Shop sex='male' />
                 </Route>
                 <Route path='/women' exact >
-                    <Shop sex='female' />
+                  <Shop sex='female' />
                 </Route>
                 <Route path='/kids' exact >
-                    <Shop sex='kids' />
+                  <Shop sex='kids' />
                 </Route>
                 <Route path='/shop/:id' exact component={ProductItem} />
                 <Route path='/cart' exact component={Cart} />
               </Switch>
               <Footer />
             </Sidebar.Pusher>
-          </Container>
-        </Sidebar.Pushable>
+          </Sidebar.Pushable>
+        </Container>
       </Router>
     </>
   );

@@ -11,8 +11,6 @@ const leftItems = [
 ]
 
 const Header = () => {
-
-
   return (
     <>
       <NavBarDesktop leftItems={leftItems} />

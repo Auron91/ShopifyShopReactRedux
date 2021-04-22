@@ -1,5 +1,6 @@
-import Client from "../../apis/shopify-buy-custom"
-// import Client from "shopify-buy/index.unoptimized.umd"
+// import Client from "../../apis/shopify-buy-custom"
+import Client from "shopify-buy/shopify-buy-custom"
+// import Client from "shopify-buy"
 import { useSelector, useDispatch } from "react-redux"
 import { PRODUCTS_FOUND, PRODUCT_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, COLLECTION_FOUND, CUSTOM_QUERY } from '../types'
 // Creates the client with Shopify-Buy and store info
@@ -24,16 +25,89 @@ function getProducts() {
 
 // // Custom query
 const customQuery = client.graphQLClient.query((root) => {
-	root.addConnection('products', (product) => {
-		product.add('tags');
-	})
-})
-
-
+	root.addConnection('products', { args: { first: 250 }}, (product) => {
+		// product.add('title');
+		// product.add('tags');
+		// product.add('metafields');
+		// root.add("availableForSale");
+		// product.add("createdAt");
+		// product.add("updatedAt");
+		// product.add("description");
+		// product.add("handle");
+		// product.add("productType");
+		// product.add("title");
+		// product.add("tags");
+		// product.add("metafields", {
+		// 	args: {
+		// 		first: 10
+		// 	}
+		// }, function (metafields) {
+		// 	metafields.add("pageInfo", function (pageInfo) {
+		// 		pageInfo.add("hasNextPage");
+		// 		pageInfo.add("hasPreviousPage");
+		// 	});
+		// 	metafields.add("edges", function (metafieldEdge) {
+		// 		metafieldEdge.add("cursor");
+		// 		metafieldEdge.add("node", function (node) {
+		// 			node.add("createdAt")
+		// 			node.add("description")
+		// 			node.add("id")
+		// 			node.add("key")
+		// 			node.add("namespace")
+		// 			node.add("parentResource")
+		// 			node.add("updatedAt")
+		// 			node.add("value")
+		// 			node.add("valueType")
+		// 		})
+		// 	});
+		// });
+		// product.add("vendor");
+		// product.add("publishedAt");
+		// product.add("onlineStoreUrl");
+		// product.add("options", function (options) {
+		// 	options.add("name");
+		// 	options.add("values");
+		// });
+		// product.add("images", {
+		// 	args: {
+		// 		first: 250
+		// 	}
+		// }, function (images) {
+		// 	images.add("pageInfo", function (pageInfo) {
+		// 		pageInfo.add("hasNextPage");
+		// 		pageInfo.add("hasPreviousPage");
+		// 	});
+		// 	images.add("edges", function (edges) {
+		// 		edges.add("cursor");
+		// 		edges.add("node", function (node) {
+		// 			node.add("id");
+		// 			node.add("src");
+		// 			node.add("altText");
+		// 		});
+		// 	});
+		// });
+		// product.add("variants", {
+		// 	args: {
+		// 		first: 250
+		// 	}
+		// }, function (variants) {
+		// 	variants.add("pageInfo", function (pageInfo) {
+		// 		pageInfo.add("hasNextPage");
+		// 		pageInfo.add("hasPreviousPage");
+		// 	});
+		// 	variants.add("edges", function (edges) {
+		// 		edges.add("cursor");
+		// 		edges.add("node", function (node) {
+		// 			node.addFragment(spreads.VariantFragment);
+		// 		});
+		// 	});
+		// });
+	});
+});
 
 const getCustomProducts = () => {
 	return async (dispatch) => {
-		const resp = await client.graphQLClient.send(customQuery).then((resp) => {
+		await client.graphQLClient.send(customQuery).then((resp) => {
 			dispatch({
 				type: CUSTOM_QUERY,
 				payload: resp
