@@ -1,6 +1,7 @@
-import Client from "shopify-buy"
+import Client from "../../apis/shopify-buy-custom"
+// import Client from "shopify-buy/index.unoptimized.umd"
 import { useSelector, useDispatch } from "react-redux"
-import { PRODUCTS_FOUND, PRODUCT_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT } from '../types'
+import { PRODUCTS_FOUND, PRODUCT_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, COLLECTION_FOUND, CUSTOM_QUERY } from '../types'
 // Creates the client with Shopify-Buy and store info
 //
 const client = Client.buildClient({
@@ -22,15 +23,24 @@ function getProducts() {
 }
 
 // // Custom query
-// const customQuery = client.graphQLClient.query((root) => {
-// 	root.addConnection('products', (product) => {
-// 		product.add('tags');
-// 	})
-// })
+const customQuery = client.graphQLClient.query((root) => {
+	root.addConnection('products', (product) => {
+		product.add('tags');
+	})
+})
 
-// client.graphQLClient.send(customQuery).then(({model, data}) => {
-// 	console.log(model);
-// })
+
+
+const getCustomProducts = () => {
+	return async (dispatch) => {
+		const resp = await client.graphQLClient.send(customQuery).then((resp) => {
+			dispatch({
+				type: CUSTOM_QUERY,
+				payload: resp
+			})
+		})
+	}
+}
 
 // Gets individual item based on id
 function getProduct(id) {
@@ -44,20 +54,20 @@ function getProduct(id) {
 	}
 }
 
-//
+
 // Gets a  collection based on that collection's id
-//
-// function getCollection() {
-// 	const collectionId = "Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzIwODAyMDYwMzAzMw=="
-// 	return (dispatch) => {
-// 		client.collection.fetchWithProducts(collectionId).then((resp) => {
-// 			dispatch({
-// 				type: COLLECTION_FOUND,
-// 				payload: resp.products,
-// 			})
-// 		})
-// 	}
-// }
+
+function getCollection(collectionId) {
+	// const collectionId = "Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzIwODAyMDYwMzAzMw=="
+	return async (dispatch) => {
+		await client.collection.fetchWithProducts(collectionId).then((resp) => {
+			dispatch({
+				type: COLLECTION_FOUND,
+				payload: resp.products,
+			})
+		})
+	}
+}
 
 // Creates initial checkout state from Shopify
 function checkout() {
@@ -164,8 +174,9 @@ export function useShopify() {
 	)
 	const shopDetails = useSelector((appState) => appState.shopifyState.shop)
 	const fetchProducts = () => dispatch(getProducts())
+	const fetchCustomQuery = () => dispatch(getCustomProducts());
 	const fetchProduct = (id) => dispatch(getProduct(id))
-	// const fetchCollection = () => dispatch(getCollection())
+	const fetchCollection = (id) => dispatch(getCollection(id))
 	const createCheckout = () => dispatch(checkout())
 	const createShop = () => dispatch(shopInfo())
 	const closeCart = () => dispatch(handleCartClose())
@@ -178,7 +189,6 @@ export function useShopify() {
 		dispatch(updateQuantityInCart(lineItemId, quantity, checkoutID))
 	const removeLineItem = (checkoutId, lineItemId) =>
 		dispatch(removeLineItemInCart(checkoutId, lineItemId))
-
 	return {
 		products,
 		product,
@@ -189,8 +199,9 @@ export function useShopify() {
 		shopDetails,
 		addVariant,
 		fetchProducts,
+		fetchCustomQuery,
 		fetchProduct,
-		// fetchCollection,
+		fetchCollection,
 		createCheckout,
 		createShop,
 		closeCart,

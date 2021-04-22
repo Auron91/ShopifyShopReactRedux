@@ -32,35 +32,47 @@ const filterOptions = [
 const sortProducts = (data, sortDirection) => {
   var result = []
   if (sortDirection === 'Most Popular') {
-    result = data.sort(( a, b ) => {
+    result = data.sort((a, b) => {
       return b.sold - a.sold
     })
   } else if (sortDirection === 'New Arrivals') {
-    result = data.sort(( a, b) => {
-      return (a.productType===null)-(b.productType===null) || -(a.productType>b.productType);
+    result = data.sort((a, b) => {
+      return (a.productType === null) - (b.productType === null) || -(a.productType > b.productType);
     })
   } else if (sortDirection === 'Price (Low-High)') {
-    result = data.sort(( a, b) => {
+    result = data.sort((a, b) => {
       return a.variants[0].price - b.variants[0].price
     })
   } else if (sortDirection === 'Price (High-Low)') {
-    result = data.sort(( a, b) => {
+    result = data.sort((a, b) => {
       return b.variants[0].price - a.variants[0].price
     })
   } else return data;
   return result;
 }
 
-const ProductGrid = (props) => {
-  const { fetchProducts, products } = useShopify();
-  const sort = useSelector( state => state.settings.sort )
-  const view = useSelector( state => state.settings.view )
+const filterProducts = (products, filterKey, filterValue) => {
+  let resp = products.filter(product => {
+    return product.metafields.filter(metafield => metafield.key === filterKey)[0].value === filterValue;
+  })
+  return resp;
+}
 
-  let sortedProducts = sortProducts(products, sort)
+const ProductGrid = (props) => {
+  const { fetchProducts, products, fetchCustomQuery } = useShopify();
+  const sort = useSelector(state => state.settings.sort)
+  const view = useSelector(state => state.settings.view)
+
+  let filteredProducts = filterProducts(products,'sex', props.sex)
+  let sortedProducts = sortProducts(filteredProducts, sort)
 
   useEffect(() => {
     fetchProducts();
-    console.log('render');
+    fetchCustomQuery();
+    // const collectionID = `gid://shopify/Collection/+${props.collection}`
+    // console.log(collectionID);
+    // const collection = fetchCollection(`gid://shopify/Collection/+${props.collection}`)
+    // console.log(collection);
   }, [])
 
   const renderGrid =
@@ -109,7 +121,7 @@ const ProductGrid = (props) => {
   return (
     <div className="">
       <FilterBar options={filterOptions} />
-      { !products ? <h2>Loading...</h2> : null }
+      { !products ? <h2>Loading...</h2> : null}
       {view === 'grid layout' && products ? renderGrid : renderItems}
     </div>
   );

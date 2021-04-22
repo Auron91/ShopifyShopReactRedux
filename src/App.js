@@ -40,7 +40,15 @@ function App() {
               <BreadcrumbBar />
               <Switch>
                 <Route path='/' exact component={Home} />
-                <Route path='/shop' exact component={Shop} />
+                <Route path='/men' exact >
+                    <Shop sex='male' />
+                </Route>
+                <Route path='/women' exact >
+                    <Shop sex='female' />
+                </Route>
+                <Route path='/kids' exact >
+                    <Shop sex='kids' />
+                </Route>
                 <Route path='/shop/:id' exact component={ProductItem} />
                 <Route path='/cart' exact component={Cart} />
               </Switch>

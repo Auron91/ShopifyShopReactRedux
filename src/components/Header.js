@@ -5,9 +5,9 @@ import MobileNav from './menu/MobileNav'
 import NavBarDesktop from './menu/NavBarDesktop'
 
 const leftItems = [
-  { as: Link, content: "Mens", key: "mens", to: '/shop' },
-  { as: Link, content: "Womens", key: "womens", to: '/shop' },
-  { as: Link, content: "Kids", key: "kids", to: '/' }
+  { as: Link, content: "Mens", key: "mens", to: '/men' },
+  { as: Link, content: "Womens", key: "womens", to: '/women' },
+  { as: Link, content: "Kids", key: "kids", to: '/kids' }
 ]
 
 const Header = () => {
