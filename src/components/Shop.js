@@ -8,8 +8,8 @@ const Shop = (props) => {
         <Grid.Column width={4}>
           <SidebarMenu />
         </Grid.Column>
-        <Grid.Column width={12}>
-          <ProductGrid sex={props.sex}/>
+        <Grid.Column width={11}>
+          <ProductGrid collection={props.collection}/>
         </Grid.Column>
       </Grid>
   );

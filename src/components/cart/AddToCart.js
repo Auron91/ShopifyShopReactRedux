@@ -53,7 +53,6 @@ const AddToCart = (props) => {
                         disabled={size !== null ? true : false}
                         style={{ backgroundColor: 'yellow' }} trigger={
                             <Button
-                                floated='right'
                                 color='red'
                                 style={{ paddingLeft: '1rem' }}
                             >

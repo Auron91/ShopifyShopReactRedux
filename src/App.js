@@ -20,13 +20,16 @@ import Cart from "./components/cart/Cart";
 function App() {
   const {
     createShop,
-    createCheckout
+    createCheckout,
+    fetchCollections
   } = useShopify();
 
   useEffect(() => {
     createShop()
     createCheckout()
+    fetchCollections()
   }, [])
+
   const visible = useSelector(state => state.settings.mobileNav)
   const dispatch = useDispatch();
 
@@ -41,13 +44,13 @@ function App() {
               <Switch>
                 <Route path='/' exact component={Home} />
                 <Route path='/men' exact >
-                  <Shop sex='male' />
+                  <Shop collection={'Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzI2NTczMzc2NzM1MQ=='} />
                 </Route>
                 <Route path='/women' exact >
-                  <Shop sex='female' />
+                  <Shop collection='Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzI2NTczNDI1ODg3MQ==' />
                 </Route>
                 <Route path='/kids' exact >
-                  <Shop sex='kids' />
+                  <Shop collection='0' />
                 </Route>
                 <Route path='/shop/:id' exact component={ProductItem} />
                 <Route path='/cart' exact component={Cart} />

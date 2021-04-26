@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import FilterBar from './FilterBar';
-import AddToCart from './cart/AddToCart'
+import AddToCart from './cart/AddToCart';
 import { Card, Image, Grid, Label, Item } from "semantic-ui-react";
 import { useShopify } from '../hooks'
+import SkeletonGrid from "./skeletons/SkeletonGrid";
 
 const filterOptions = [
   // {
@@ -52,26 +53,32 @@ const sortProducts = (data, sortDirection) => {
   return result;
 }
 
-const filterProducts = (products, filterKey, filterValue) => {
-  let resp = products.filter(product => {
-    return product.metafields.filter(metafield => metafield.key === filterKey)[0].value === filterValue;
-  })
-  return resp;
-}
+// const filterProducts = (products, filterKey, filterValue) => {
+//   let resp = products.filter(product => {
+//     return product.metafields.filter(metafield => metafield.key === filterKey)[0].value === filterValue;
+//   })
+//   return resp;
+// }
 
 const ProductGrid = (props) => {
-  const { fetchProducts, products, fetchCustomQuery } = useShopify();
+  const { collections, fetchCollections, featured, fetchCollection } = useShopify();
   const sort = useSelector(state => state.settings.sort)
   const view = useSelector(state => state.settings.view)
 
-  let filteredProducts = filterProducts(products, 'sex', props.sex)
-  let sortedProducts = sortProducts(filteredProducts, sort)
-
   useEffect(() => {
-    fetchProducts();
-    fetchCustomQuery();
+    fetchCollection(props.collection)
+    // fetchCollections()
+  }, [props.collection])
 
-  }, [])
+  // let products = collections.filter(collection => collection.id === props.collection)[0].products
+  let sortedProducts = sortProducts(featured, sort)
+
+  const skeletonArray = [1,2,3,4,5,6]
+  const skeleton = (
+    <Grid columns={3}>
+      {skeletonArray.map((n) => <SkeletonGrid key={n} theme='light'/>)}
+    </Grid>
+  )
 
   const renderGrid =
     (<Grid columns={3} stackable doubling>
@@ -93,18 +100,18 @@ const ProductGrid = (props) => {
     </Grid >)
 
   const renderItems =
-    (<Item.Group divided>
+    (<Item.Group divided >
       {
         sortedProducts.map(product => {
           return (
-            <Item  key={product.id} >
+            <Item key={product.id} stackable>
               <Item.Image as={Link} to={`/shop/${product.id}`} size='medium' src={product.images[0].src} />
               <Item.Content>
                 <Item.Header as={Link} to={`/shop/${product.id}`}>{product.title}</Item.Header>
                 <Item.Description>{product.description}</Item.Description>
                 <Item.Header color='red'><p>{product.variants[0].price} $ </p></Item.Header>
                 <Item.Description>
-                  <AddToCart product= {product} />
+                  <AddToCart product={product} />
                 </Item.Description>
               </Item.Content>
             </Item>
@@ -116,8 +123,9 @@ const ProductGrid = (props) => {
   return (
     <div className="">
       <FilterBar options={filterOptions} />
-      { !products ? <h2>Loading...</h2> : null}
-      {view === 'grid layout' && products ? renderGrid : renderItems}
+      {!featured[0] ?  skeleton : null}
+
+      {view === 'grid layout' && featured ? renderGrid : renderItems}
     </div>
   );
 }

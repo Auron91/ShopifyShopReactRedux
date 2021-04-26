@@ -2495,6 +2495,25 @@ function query(client) {
     root.add("handle");
     root.add("productType");
     root.add("title");
+    root.add("collections", {
+      args: {
+        first: 10
+      }
+    }, function (collections) {
+      collections.add("edges", function (collectionEdge) {
+        collectionEdge.add("cursor");
+        collectionEdge.add("node", function (collection){
+          collection.add("description");
+          collection.add("handle");
+          collection.add("id");
+          collection.add("title");
+        })
+      })
+      collections.add("pageInfo", function (pageInfo) {
+        pageInfo.add("hasNextPage");
+        pageInfo.add("hasPreviousPage");
+      });
+    });
     root.add("vendor");
     root.add("publishedAt");
     root.add("onlineStoreUrl");
@@ -9466,6 +9485,7 @@ var Product = {
     "publishedAt": "DateTime",
     "title": "String",
     "tags": "String",
+    "collections": "CollectionConnection",
     "metafield": "Metafield",
     "metafields": "MetafieldConnection",
     "tags": "String",

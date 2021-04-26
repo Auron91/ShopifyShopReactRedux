@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Grid, Header, Icon, Popup } from 'semantic-ui-react';
+import SkeletonProductItem from './skeletons/SkeletonProductItem'
 import { useShopify } from '../hooks';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
@@ -16,7 +17,8 @@ const ProductItem = (props) => {
         fetchProduct(props.match.params.id).then((response) => {
             setProduct(response);
         });
-    }, [])
+        return () => setProduct([])
+    }, [props.match.params.id])
 
     const toggleSize = (e) => {
         setSize(e.target.value)
@@ -45,7 +47,7 @@ const ProductItem = (props) => {
     }
 
     if (_.isEmpty(product)) {
-        return <div className="">Loading...</div>
+        return <SkeletonProductItem />
     } else {
         return (
             <Grid container columns={2} doubling stackable padded>
@@ -79,15 +81,16 @@ const ProductItem = (props) => {
                                             <label
                                                 key={variant.id}
                                                 name={variant.id}
-                                                className={size === variant.id ? "product-variants__label on" : "product-variants__label"}
+                                                className={size === variant.id ? "product-variants__label on" : variant.available ? "product-variants__label" : "product-variants__label disabled"}
                                             >
                                                 <input
                                                     onClick={toggleSize}
+                                                    disabled = {!variant.available}
                                                     type="radio" className="products-variant__radio"
                                                     name='variant'
                                                     value={variant.id}
                                                 />
-                                                {variant.title}
+                                                {variant.selectedOptions[0].value}
                                             </label>
                                         )
                                     })}

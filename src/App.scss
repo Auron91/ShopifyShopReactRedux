@@ -1,7 +1,14 @@
+html {
+    scroll-behavior: smooth;
+
+}
 body {
     overflow: scroll; /* Show scrollbars */
   }
 
+  a {
+      color: black!important;
+  }
 .root {
     display: flex;
     flex-direction: column;
@@ -24,6 +31,7 @@ body {
         display: flex;
     }
 }
+
 .hamburger {
     padding: 0.25rem;
     width: 50px;
@@ -51,6 +59,10 @@ body {
         height: 60px;
         border: 2px solid #232323;
         border-radius: 50%;
+        z-index: 103;
+        @media(min-width: 767px) {
+            display: none;
+        }
     }
     &__box {
         width: 2.5rem;
@@ -86,6 +98,7 @@ body {
         top: 0.75rem;
     }
     &--active {
+        cursor: pointer;
         padding: 0.25em;
         margin: 0.25em;
         background-color: transparent;
@@ -149,6 +162,10 @@ body {
     &__radio {
         outline: none;
     }
+}
+.disabled {
+    border: 1px solid #e5e5e5;
+    color: #e5e5e5;
 }
 .on {
     border: 1px solid #232323;

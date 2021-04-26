@@ -1,5 +1,5 @@
 
-import { PRODUCTS_FOUND, PRODUCT_FOUND, COLLECTION_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, CUSTOM_QUERY } from '../types'
+import { PRODUCTS_FOUND, PRODUCT_FOUND, COLLECTION_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, CUSTOM_QUERY,COLLECTIONS_FOUND } from '../types'
 
 const initialState = {
 	isCartOpen: false,
@@ -9,7 +9,8 @@ const initialState = {
 	featured: [],
 	product: {},
 	shop: {},
-	custom: {}
+	custom: {},
+	collections: []
 }
 
 const shopifyReducer =(state = initialState, action) => {
@@ -38,6 +39,8 @@ const shopifyReducer =(state = initialState, action) => {
 			return { ...state, cartCount: action.payload }
 		case CUSTOM_QUERY:
 			return {...state, custom: action.payload}
+		case COLLECTIONS_FOUND:
+			return {...state, collections: action.payload}
 		default:
 			return state
 	}

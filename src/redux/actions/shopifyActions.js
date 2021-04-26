@@ -1,8 +1,8 @@
-// import Client from "../../apis/shopify-buy-custom"
-import Client from "shopify-buy/shopify-buy-custom"
+import Client from "../../apis/shopify-buy-custom"
+// import Client from "shopify-buy/shopify-buy-custom"
 // import Client from "shopify-buy"
 import { useSelector, useDispatch } from "react-redux"
-import { PRODUCTS_FOUND, PRODUCT_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, COLLECTION_FOUND, CUSTOM_QUERY } from '../types'
+import { PRODUCTS_FOUND, PRODUCT_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, COLLECTION_FOUND, CUSTOM_QUERY, COLLECTIONS_FOUND } from '../types'
 // Creates the client with Shopify-Buy and store info
 //
 const client = Client.buildClient({
@@ -25,10 +25,10 @@ function getProducts() {
 
 // // Custom query
 const customQuery = client.graphQLClient.query((root) => {
-	root.addConnection('products', { args: { first: 250 }}, (product) => {
+	root.addConnection('products', { args: { first: 250 } }, (product) => {
 		// product.add('title');
-		// product.add('tags');
-		// product.add('metafields');
+		product.add('tags');
+		product.add('metafields');
 		// root.add("availableForSale");
 		// product.add("createdAt");
 		// product.add("updatedAt");
@@ -143,6 +143,19 @@ function getCollection(collectionId) {
 	}
 }
 
+// Get all collections
+
+const getCollections = () => {
+	return dispatch =>(
+		client.collection.fetchAllWithProducts().then((resp) => {
+			dispatch({
+				type: COLLECTIONS_FOUND,
+				payload: resp
+			})
+		})
+	  )
+}
+
 // Creates initial checkout state from Shopify
 function checkout() {
 	return (dispatch) => {
@@ -247,8 +260,10 @@ export function useShopify() {
 		(appState) => appState.shopifyState.checkout
 	)
 	const shopDetails = useSelector((appState) => appState.shopifyState.shop)
+	const collections = useSelector((appState) => appState.shopifyState.collections)
 	const fetchProducts = () => dispatch(getProducts())
 	const fetchCustomQuery = () => dispatch(getCustomProducts());
+	const fetchCollections = () => dispatch(getCollections());
 	const fetchProduct = (id) => dispatch(getProduct(id))
 	const fetchCollection = (id) => dispatch(getCollection(id))
 	const createCheckout = () => dispatch(checkout())
@@ -271,6 +286,7 @@ export function useShopify() {
 		checkoutState,
 		cartCount,
 		shopDetails,
+		collections,
 		addVariant,
 		fetchProducts,
 		fetchCustomQuery,
@@ -283,5 +299,6 @@ export function useShopify() {
 		updateQuantity,
 		removeLineItem,
 		setCount,
+		fetchCollections
 	}
 }
