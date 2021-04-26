@@ -13,3 +13,7 @@ export const toggleMobileNav = () => {
 export const handlePusher = () => {
     return { type: 'HANDLE_PUSHER' }
 }
+
+export const handleSizeFilter = (sizeFilter) => {
+    return { type: 'HANDLE_SIZE_FILTER', payload: sizeFilter }
+}

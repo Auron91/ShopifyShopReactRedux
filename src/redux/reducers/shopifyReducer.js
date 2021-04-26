@@ -1,5 +1,5 @@
 
-import { PRODUCTS_FOUND, PRODUCT_FOUND, COLLECTION_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, CUSTOM_QUERY,COLLECTIONS_FOUND } from '../types'
+import { PRODUCTS_FOUND, PRODUCT_FOUND, COLLECTION_FOUND, CHECKOUT_FOUND, SHOP_FOUND, ADD_VARIANT_TO_CART, UPDATE_QUANTITY_IN_CART, REMOVE_LINE_ITEM_IN_CART, OPEN_CART, CLOSE_CART, CART_COUNT, CUSTOM_QUERY, COLLECTIONS_FOUND } from '../types'
 
 const initialState = {
 	isCartOpen: false,
@@ -10,17 +10,22 @@ const initialState = {
 	product: {},
 	shop: {},
 	custom: {},
-	collections: []
+	collections: [],
+	settings: {
+		sizeFilter: [],
+		colorFilter: [],
+		sort: 'New Arrivals'
+	}
 }
 
-const shopifyReducer =(state = initialState, action) => {
+const shopifyReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case PRODUCTS_FOUND:
 			return { ...state, products: action.payload }
 		case PRODUCT_FOUND:
 			return { ...state, product: action.payload }
 		case COLLECTION_FOUND:
-			return { ...state, featured: action.payload }
+			return { ...state, featured: action.payload, products: action.payload }
 		case CHECKOUT_FOUND:
 			return { ...state, checkout: action.payload }
 		case SHOP_FOUND:
@@ -38,9 +43,15 @@ const shopifyReducer =(state = initialState, action) => {
 		case CART_COUNT:
 			return { ...state, cartCount: action.payload }
 		case CUSTOM_QUERY:
-			return {...state, custom: action.payload}
+			return { ...state, custom: action.payload }
 		case COLLECTIONS_FOUND:
-			return {...state, collections: action.payload}
+			return { ...state, collections: action.payload }
+		case 'HANDLE_SIZE_FILTER':
+			return {
+				...state,
+				settings: { sizeFilter: action.payload.sizeFilter },
+				products: action.payload.products
+			}
 		default:
 			return state
 	}

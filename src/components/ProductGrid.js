@@ -33,50 +33,44 @@ const filterOptions = [
 
 const sortProducts = (data, sortDirection) => {
   var result = []
-  if (sortDirection === 'Most Popular') {
-    result = data.sort((a, b) => {
-      return b.sold - a.sold
-    })
-  } else if (sortDirection === 'New Arrivals') {
-    result = data.sort((a, b) => {
-      return (a.productType === null) - (b.productType === null) || -(a.productType > b.productType);
-    })
-  } else if (sortDirection === 'Price (Low-High)') {
-    result = data.sort((a, b) => {
-      return a.variants[0].price - b.variants[0].price
-    })
-  } else if (sortDirection === 'Price (High-Low)') {
-    result = data.sort((a, b) => {
-      return b.variants[0].price - a.variants[0].price
-    })
-  } else return data;
-  return result;
+  if (data !== undefined) {
+    if (sortDirection === 'Most Popular') {
+      result = data.sort((a, b) => {
+        return b.sold - a.sold
+      })
+    } else if (sortDirection === 'New Arrivals') {
+      result = data.sort((a, b) => {
+        return (a.productType === null) - (b.productType === null) || -(a.productType > b.productType);
+      })
+    } else if (sortDirection === 'Price (Low-High)') {
+      result = data.sort((a, b) => {
+        return a.variants[0].price - b.variants[0].price
+      })
+    } else if (sortDirection === 'Price (High-Low)') {
+      result = data.sort((a, b) => {
+        return b.variants[0].price - a.variants[0].price
+      })
+    } else return data;
+    return result;
+  }
 }
 
-// const filterProducts = (products, filterKey, filterValue) => {
-//   let resp = products.filter(product => {
-//     return product.metafields.filter(metafield => metafield.key === filterKey)[0].value === filterValue;
-//   })
-//   return resp;
-// }
-
 const ProductGrid = (props) => {
-  const { collections, fetchCollections, featured, fetchCollection } = useShopify();
+  const { products, featured, fetchCollection } = useShopify();
   const sort = useSelector(state => state.settings.sort)
   const view = useSelector(state => state.settings.view)
 
+
   useEffect(() => {
     fetchCollection(props.collection)
-    // fetchCollections()
   }, [props.collection])
 
-  // let products = collections.filter(collection => collection.id === props.collection)[0].products
-  let sortedProducts = sortProducts(featured, sort)
+  let sortedProducts = sortProducts(products, sort)
 
-  const skeletonArray = [1,2,3,4,5,6]
+  const skeletonArray = [1, 2, 3, 4, 5, 6]
   const skeleton = (
     <Grid columns={3}>
-      {skeletonArray.map((n) => <SkeletonGrid key={n} theme='light'/>)}
+      {skeletonArray.map((n) => <SkeletonGrid key={n} theme='light' />)}
     </Grid>
   )
 
@@ -104,7 +98,7 @@ const ProductGrid = (props) => {
       {
         sortedProducts.map(product => {
           return (
-            <Item key={product.id} stackable>
+            <Item key={product.id}>
               <Item.Image as={Link} to={`/shop/${product.id}`} size='medium' src={product.images[0].src} />
               <Item.Content>
                 <Item.Header as={Link} to={`/shop/${product.id}`}>{product.title}</Item.Header>
@@ -123,8 +117,7 @@ const ProductGrid = (props) => {
   return (
     <div className="">
       <FilterBar options={filterOptions} />
-      {!featured[0] ?  skeleton : null}
-
+      {!featured[0] ? skeleton : null}
       {view === 'grid layout' && featured ? renderGrid : renderItems}
     </div>
   );
