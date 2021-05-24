@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/ShopifyReactRedux/static/css/main.10809214.chunk.css",
-    "main.js": "/ShopifyReactRedux/static/js/main.49952808.chunk.js",
-    "main.js.map": "/ShopifyReactRedux/static/js/main.49952808.chunk.js.map",
-    "runtime-main.js": "/ShopifyReactRedux/static/js/runtime-main.2ad7cc36.js",
-    "runtime-main.js.map": "/ShopifyReactRedux/static/js/runtime-main.2ad7cc36.js.map",
-    "static/css/2.e8ae4931.chunk.css": "/ShopifyReactRedux/static/css/2.e8ae4931.chunk.css",
-    "static/js/2.d416445b.chunk.js": "/ShopifyReactRedux/static/js/2.d416445b.chunk.js",
-    "static/js/2.d416445b.chunk.js.map": "/ShopifyReactRedux/static/js/2.d416445b.chunk.js.map",
-    "index.html": "/ShopifyReactRedux/index.html",
-    "static/css/2.e8ae4931.chunk.css.map": "/ShopifyReactRedux/static/css/2.e8ae4931.chunk.css.map",
-    "static/css/main.10809214.chunk.css.map": "/ShopifyReactRedux/static/css/main.10809214.chunk.css.map",
-    "static/js/2.d416445b.chunk.js.LICENSE.txt": "/ShopifyReactRedux/static/js/2.d416445b.chunk.js.LICENSE.txt",
-    "static/media/semantic.min.css": "/ShopifyReactRedux/static/media/outline-icons.ddae9b1b.woff"
+    "main.css": "/ShopifyShopReactRedux/static/css/main.10809214.chunk.css",
+    "main.js": "/ShopifyShopReactRedux/static/js/main.49952808.chunk.js",
+    "main.js.map": "/ShopifyShopReactRedux/static/js/main.49952808.chunk.js.map",
+    "runtime-main.js": "/ShopifyShopReactRedux/static/js/runtime-main.09bd5910.js",
+    "runtime-main.js.map": "/ShopifyShopReactRedux/static/js/runtime-main.09bd5910.js.map",
+    "static/css/2.8a8f73e8.chunk.css": "/ShopifyShopReactRedux/static/css/2.8a8f73e8.chunk.css",
+    "static/js/2.d416445b.chunk.js": "/ShopifyShopReactRedux/static/js/2.d416445b.chunk.js",
+    "static/js/2.d416445b.chunk.js.map": "/ShopifyShopReactRedux/static/js/2.d416445b.chunk.js.map",
+    "index.html": "/ShopifyShopReactRedux/index.html",
+    "static/css/2.8a8f73e8.chunk.css.map": "/ShopifyShopReactRedux/static/css/2.8a8f73e8.chunk.css.map",
+    "static/css/main.10809214.chunk.css.map": "/ShopifyShopReactRedux/static/css/main.10809214.chunk.css.map",
+    "static/js/2.d416445b.chunk.js.LICENSE.txt": "/ShopifyShopReactRedux/static/js/2.d416445b.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/ShopifyShopReactRedux/static/media/outline-icons.ddae9b1b.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.2ad7cc36.js",
-    "static/css/2.e8ae4931.chunk.css",
+    "static/js/runtime-main.09bd5910.js",
+    "static/css/2.8a8f73e8.chunk.css",
     "static/js/2.d416445b.chunk.js",
     "static/css/main.10809214.chunk.css",
     "static/js/main.49952808.chunk.js"
