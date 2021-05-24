@@ -18,6 +18,22 @@ const initialState = {
 	}
 }
 
+//helpers
+const filterSizeProducts = (products, sizeFilter) => {
+
+	if (sizeFilter.length === 0) {
+		return products
+	} else {
+		let resp = products.filter(product => {
+			return product.variants.map((variant) => {
+				return sizeFilter.includes(variant.selectedOptions[0].value) && variant.available
+			}).includes(true)
+		})
+		return resp
+	}
+
+}
+
 const shopifyReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case PRODUCTS_FOUND:
@@ -47,10 +63,11 @@ const shopifyReducer = (state = initialState, action) => {
 		case COLLECTIONS_FOUND:
 			return { ...state, collections: action.payload }
 		case 'HANDLE_SIZE_FILTER':
+			let filteredProducts = filterSizeProducts(action.payload.products, action.payload.sizeFilter)
 			return {
 				...state,
 				settings: { sizeFilter: action.payload.sizeFilter },
-				products: action.payload.products
+				products: filteredProducts
 			}
 		default:
 			return state

@@ -134,7 +134,7 @@ function getProduct(id) {
 function getCollection(collectionId) {
 	// const collectionId = "Z2lkOi8vc2hvcGlmeS9Db2xsZWN0aW9uLzIwODAyMDYwMzAzMw=="
 	return (dispatch) => {
-		 client.collection.fetchWithProducts(collectionId).then((resp) => {
+		client.collection.fetchWithProducts(collectionId).then((resp) => {
 			dispatch({
 				type: COLLECTION_FOUND,
 				payload: resp.products,
@@ -146,14 +146,14 @@ function getCollection(collectionId) {
 // Get all collections
 
 const getCollections = () => {
-	return dispatch =>(
+	return dispatch => (
 		client.collection.fetchAllWithProducts().then((resp) => {
 			dispatch({
 				type: COLLECTIONS_FOUND,
 				payload: resp
 			})
 		})
-	  )
+	)
 }
 
 // Creates initial checkout state from Shopify
@@ -251,31 +251,13 @@ function handleSetCount(count) {
 // filters
 
 const applySizeFilter = (products, sizeFilter) => {
-	let filteredProducts = filterSizeProducts(products, sizeFilter)
 	return {
 		type: 'HANDLE_SIZE_FILTER',
-		payload: {
-			sizeFilter,
-			products: filteredProducts
-		}
+		payload: { products, sizeFilter }
 	}
 }
 
-//helpers
-const filterSizeProducts = (products, sizeFilter) => {
-	if (products !== undefined) {
-		if (sizeFilter.length === 0) {
-			return products
-		} else {
-			let resp = products.filter(product => {
-				return product.variants.map((variant) => {
-					return sizeFilter.includes(variant.selectedOptions[0].value) && variant.available
-				}).includes(true)
-			})
-			return resp
-		}
-	}
-}
+
 
 export function useShopify() {
 	const dispatch = useDispatch()
@@ -284,9 +266,7 @@ export function useShopify() {
 	const products = useSelector((appState) => appState.shopifyState.products)
 	const product = useSelector((appState) => appState.shopifyState.product)
 	const featured = useSelector((appState) => appState.shopifyState.featured)
-	const checkoutState = useSelector(
-		(appState) => appState.shopifyState.checkout
-	)
+	const checkoutState = useSelector((appState) => appState.shopifyState.checkout)
 	const shopDetails = useSelector((appState) => appState.shopifyState.shop)
 	const collections = useSelector((appState) => appState.shopifyState.collections)
 	const fetchProducts = () => dispatch(getProducts())
@@ -299,13 +279,9 @@ export function useShopify() {
 	const closeCart = () => dispatch(handleCartClose())
 	const openCart = () => dispatch(handleCartOpen())
 	const setCount = (count) => dispatch(handleSetCount(count))
-
-	const addVariant = (checkoutId, lineItemsToAdd) =>
-		dispatch(addVariantToCart(checkoutId, lineItemsToAdd))
-	const updateQuantity = (lineItemId, quantity, checkoutID) =>
-		dispatch(updateQuantityInCart(lineItemId, quantity, checkoutID))
-	const removeLineItem = (checkoutId, lineItemId) =>
-		dispatch(removeLineItemInCart(checkoutId, lineItemId))
+	const addVariant = (checkoutId, lineItemsToAdd) => dispatch(addVariantToCart(checkoutId, lineItemsToAdd))
+	const updateQuantity = (lineItemId, quantity, checkoutID) => dispatch(updateQuantityInCart(lineItemId, quantity, checkoutID))
+	const removeLineItem = (checkoutId, lineItemId) => dispatch(removeLineItemInCart(checkoutId, lineItemId))
 	const handleSizeFilter = (products, sizeFilter) => dispatch(applySizeFilter(products, sizeFilter))
 	return {
 		products,

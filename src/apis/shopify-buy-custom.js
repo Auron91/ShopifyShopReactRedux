@@ -9929,5 +9929,6 @@ var Client = function () {
   return Client;
 }();
 
-module.exports = Client;
+// module.exports = Client;
+export default Client
 //# sourceMappingURL=index.js.map
