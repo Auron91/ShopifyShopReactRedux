@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/ShopifyShopReactRedux/static/css/main.10809214.chunk.css",
-    "main.js": "/ShopifyShopReactRedux/static/js/main.bb02314b.chunk.js",
-    "main.js.map": "/ShopifyShopReactRedux/static/js/main.bb02314b.chunk.js.map",
+    "main.js": "/ShopifyShopReactRedux/static/js/main.d7bb2e14.chunk.js",
+    "main.js.map": "/ShopifyShopReactRedux/static/js/main.d7bb2e14.chunk.js.map",
     "runtime-main.js": "/ShopifyShopReactRedux/static/js/runtime-main.09bd5910.js",
     "runtime-main.js.map": "/ShopifyShopReactRedux/static/js/runtime-main.09bd5910.js.map",
     "static/css/2.8a8f73e8.chunk.css": "/ShopifyShopReactRedux/static/css/2.8a8f73e8.chunk.css",
@@ -19,6 +19,6 @@
     "static/css/2.8a8f73e8.chunk.css",
     "static/js/2.d416445b.chunk.js",
     "static/css/main.10809214.chunk.css",
-    "static/js/main.bb02314b.chunk.js"
+    "static/js/main.d7bb2e14.chunk.js"
   ]
 }
